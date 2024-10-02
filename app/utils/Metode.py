@@ -9,12 +9,12 @@ weights = [0.032, 0.002, -0.02, -0.006, -0.003, -0.008, -0.006, 0.003, 0.023]
 bias = 0
 eta = 0.01
 
-# def validasi(data) :
-#     for i1, row in enumerate(data):
-#         for i2, col in enumerate(row):
-#             if data[i1][i2] not in attrs[i2] :
-                
-#     return data
+def validasiData(data) :
+    for i1, row in enumerate(data):
+        for i2, col in enumerate(row):
+            if data[i1][i2] not in attrs[i2] :
+                return False
+    return True
 
 def konversi(data) :
     for i1, row in enumerate(data):
