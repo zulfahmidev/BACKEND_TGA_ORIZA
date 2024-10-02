@@ -126,11 +126,11 @@ def testImport() :
         file = BytesIO(file_bytes)
         df = pd.read_excel(file, engine='openpyxl')
         data = df.values.tolist()
-        if not Metode.validasi(data) :
-            return jsonify(
-                message="Import failed, there is incorrect data.",
-                data=None
-            ), 400
+        # if not Metode.validasi(data) :
+        #     return jsonify(
+        #         message="Import failed, there is incorrect data.",
+        #         data=None
+        #     ), 400
         for dt in data:
             DataTest(
                 nama=dt[0],
