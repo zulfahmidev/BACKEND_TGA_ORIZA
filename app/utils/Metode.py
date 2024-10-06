@@ -16,6 +16,13 @@ def validasiData(data) :
                 return False
     return True
 
+def custom_round(number, ndigits=0):
+    factor = 10 ** ndigits
+    if number * factor - int(number * factor) == 0.5:
+        return (int(number * factor) + (1 if number > 0 else -1)) / factor
+    else:
+        return round(number, ndigits)
+    
 def konversi(data) :
     for i1, row in enumerate(data):
         for i2, col in enumerate(row):
@@ -42,6 +49,8 @@ def train(data) :
                 
             rxs.append(x)
         y = rxs[-1]
+        
+        count = custom_round(count + bias, 3)
         rxs.append(count)
         
         output = 0 if count <= 0 else 1
@@ -49,10 +58,9 @@ def train(data) :
         
         error = y - output
         rxs.append(error)
-        
-        bias = bias + ( error * eta )
+        bias = custom_round(bias + ( error * eta ), 3)
         for i2, col in enumerate(weights):
-            weights[i2] = round(col + ( error * rxs[i2] * eta ), 3)    
+            weights[i2] = custom_round(col + ( error * rxs[i2] * eta ), 3)    
             
         result.append(rxs)
     return result
@@ -69,6 +77,8 @@ def uji(data):
                 
             rxs.append(x)
         y = rxs[-1]
+        
+        count = custom_round(count + bias, 3)
         rxs.append(count)
         
         output = 0 if count <= 0 else 1
@@ -105,3 +115,4 @@ def calcResult(result) :
     F1Score = 2 * (precision * recall) / (precision + recall)
     
     return accuracy, recall, precision, F1Score, TP, TN, FP, FN
+
