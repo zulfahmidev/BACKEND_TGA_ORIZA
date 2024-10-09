@@ -15,17 +15,22 @@ collections.Iterable = collections.abc.Iterable
 app = Flask(__name__)
 # app.static_folder = 'static'
 
-load_dotenv('.env')
+load_dotenv('.env', override=True)
 
 with app.app_context():
   InitConfig(app)
 
   jwt.init_app(app)
   db.init_app(app)
+  db.session.remove()
   db.session.reset()
 
   app.register_blueprint(auth, url_prefix='/api/auth')
   app.register_blueprint(data, url_prefix='/api/data')
+  
+  @app.teardown_request
+  def teardown_request(exception=None):
+      db.session.remove()
   
   data_train = [v.to_list()[1:11] for v in DataTrain.query.all()]
   Metode.trains(data_train)

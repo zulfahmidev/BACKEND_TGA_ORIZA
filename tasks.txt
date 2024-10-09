@@ -1,4 +1,0 @@
-- hubungkan dengan database ok
-- buat api untuk otentikasi ok 
-- buat api untuk get data ok
-- buat api untuk import excel ok
