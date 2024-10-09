@@ -27,6 +27,4 @@ with app.app_context():
   app.register_blueprint(data, url_prefix='/api/data')
   
   data_train = [v.to_list()[1:11] for v in DataTrain.query.all()]
-  dk = Metode.konversi(copy.deepcopy(data_train))
-  dn = Metode.normalisasi(copy.deepcopy(dk))
-  Metode.train(copy.deepcopy(dn))
+  Metode.trains(data_train)

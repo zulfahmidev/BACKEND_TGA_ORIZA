@@ -70,11 +70,9 @@ def trainImport() :
                 jumlah_tanggungan=dt[9],
                 kelas=dt[10]
             )
-            
+        
         data_train = [v.to_list()[1:11] for v in DataTrain.query.all()]
-        dk = Metode.konversi(copy.deepcopy(data_train))
-        dn = Metode.normalisasi(copy.deepcopy(dk))
-        Metode.train(copy.deepcopy(dn))
+        Metode.trains(data_train)
         
         return jsonify(
             message="Data imported successfully",

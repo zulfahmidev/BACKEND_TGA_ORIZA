@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import random
 from app.utils.attributes import attrs
+import copy
 
 minD = [1, 1, 1, 1, 1, 1, 1, 1, 1]
 maxD = [6, 2, 11, 6, 2, 10, 5, 6, 8]
@@ -17,11 +18,17 @@ def validasiData(data) :
     return True
 
 def custom_round(number, ndigits=0):
-    factor = 10 ** ndigits
-    if number * factor - int(number * factor) == 0.5:
-        return (int(number * factor) + (1 if number > 0 else -1)) / factor
-    else:
-        return round(number, ndigits)
+    newNumber = number
+    ml = 7
+    
+    while (ml >= ndigits) :
+        factor = 10 ** ml
+        if newNumber * factor - int(newNumber * factor) == 0.5:
+            newNumber = (int(newNumber * factor) + (1 if newNumber > 0 else -1)) / factor
+        else:
+            newNumber = round(newNumber, ml)
+        ml -= 1
+    return newNumber
     
 def konversi(data) :
     for i1, row in enumerate(data):
@@ -33,7 +40,7 @@ def normalisasi(data) :
     for i1, row in enumerate(data):
         for i2, x in enumerate(row):
             if i2 < 9 :
-                data[i1][i2] = round((x - 1) / (maxD[i2] - 1), 2)
+                data[i1][i2] = custom_round((x - 1) / (maxD[i2] - 1), 2)
     return data
 
 def train(data) :
@@ -50,20 +57,29 @@ def train(data) :
             rxs.append(x)
         y = rxs[-1]
         
-        count = custom_round(count + bias, 3)
-        rxs.append(count)
-        
+        count = count + bias
         output = 0 if count <= 0 else 1
-        rxs.append(output)
-        
         error = y - output
+        
+        rxs.append(custom_round(count, 3))
+        rxs.append(output)
         rxs.append(error)
+        
         bias = custom_round(bias + ( error * eta ), 3)
         for i2, col in enumerate(weights):
             weights[i2] = custom_round(col + ( error * rxs[i2] * eta ), 3)    
-            
+        
         result.append(rxs)
     return result
+
+def trains(data) :
+    global weights, bias
+    weights = [0.032, 0.002, -0.02, -0.006, -0.003, -0.008, -0.006, 0.003, 0.023]
+    bias = 0
+    dk = konversi(copy.deepcopy(data))
+    dn = normalisasi(copy.deepcopy(dk))
+    for i in range(10) :
+        train(copy.deepcopy(dn))
 
 def uji(data):
     result = []
@@ -78,15 +94,13 @@ def uji(data):
             rxs.append(x)
         y = rxs[-1]
         
-        count = custom_round(count + bias, 3)
-        rxs.append(count)
-        
+        count = count + bias
         output = 0 if count <= 0 else 1
-        rxs.append(output)
-        
         error = y - output
-        rxs.append(error)
         
+        rxs.append(custom_round(count, 3))
+        rxs.append(output)
+        rxs.append(error)
         result.append(rxs)
     return result
 
