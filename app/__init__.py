@@ -22,6 +22,7 @@ with app.app_context():
 
   jwt.init_app(app)
   db.init_app(app)
+  db.session.reset()
 
   app.register_blueprint(auth, url_prefix='/api/auth')
   app.register_blueprint(data, url_prefix='/api/data')
